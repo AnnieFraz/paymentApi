@@ -1,8 +1,7 @@
 package com.annarasburn.paymentapi.dao;
 
+import com.annarasburn.paymentapi.dto.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-@RepositoryRestResource(collectionResourceRel = "payment", path = "payment")
-public interface PaymentDao<Payment> extends JpaRepository<Payment, Long> {
+public interface PaymentDao extends JpaRepository<Payment, Integer> {
 }

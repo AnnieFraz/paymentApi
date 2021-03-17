@@ -4,13 +4,10 @@ import com.annarasburn.paymentapi.dao.PaymentDao;
 import com.annarasburn.paymentapi.dto.Currency;
 import com.annarasburn.paymentapi.dto.Payment;
 import com.annarasburn.paymentapi.dto.exception.DataMissingException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.parameters.P;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -95,14 +92,13 @@ class PaymentServiceTest {
 
     @Test
     void updatePayment() throws Exception {
-        Optional<Payment> updatedPayment = Optional.of(new Payment(Long.valueOf(1), new BigDecimal(200), Currency.USD, "Calender"));
+        Optional<Payment> updatedPayment = Optional.of(new Payment(1, new BigDecimal(200), Currency.USD, "Calender"));
         Optional<Payment> payment = Optional.of(getDummyPayment());
-        when(mockPaymentDao.findById(Long.valueOf(1))).thenReturn(payment);
+        when(mockPaymentDao.findById(1)).thenReturn(payment);
 
-        when(mockPaymentDao.save(updatedPayment)).thenReturn(updatedPayment);
-        when(mockPaymentDao.findById(Long.valueOf(1))).thenReturn(updatedPayment);
+        when(mockPaymentDao.findById(1)).thenReturn(updatedPayment);
 
-        Payment actualPayment = paymentService.updatePayment(Long.valueOf(1), updatedPayment.get());
+        Payment actualPayment = paymentService.updatePayment(1, updatedPayment.get());
 
         assertEquals(updatedPayment.get(), actualPayment);
         assertEquals(updatedPayment.get().getId(), actualPayment.getId());
@@ -111,13 +107,12 @@ class PaymentServiceTest {
 
     @Test
     void updatePaymentEverythingNullButCurrency() throws Exception {
-        Payment updatePayment = new Payment(Long.valueOf(1), null, Currency.USD, null);
+        Payment updatePayment = new Payment(1, null, Currency.USD, null);
         Optional<Payment> updatedPayment = Optional.of(new Payment(new BigDecimal(100), Currency.USD, "Telephone"));
         Optional<Payment> payment = Optional.of(getDummyPayment());
-        when(mockPaymentDao.findById(Long.valueOf(1))).thenReturn(payment);
-        when(mockPaymentDao.save(updatePayment)).thenReturn(updatedPayment);
-        when(mockPaymentDao.findById(Long.valueOf(1))).thenReturn(updatedPayment);
-        Payment actualPayment = paymentService.updatePayment(Long.valueOf(1), updatePayment);
+        when(mockPaymentDao.findById(1)).thenReturn(payment);
+        when(mockPaymentDao.findById(1)).thenReturn(updatedPayment);
+        Payment actualPayment = paymentService.updatePayment(1, updatePayment);
         assertEquals(updatedPayment.get(), actualPayment);
         assertEquals(updatedPayment.get().getId(), actualPayment.getId());
         assertEquals(updatedPayment.get().getCurrency(), actualPayment.getCurrency());
@@ -125,13 +120,12 @@ class PaymentServiceTest {
 
     @Test
     void updatePaymentEverythingNullButProductName() throws Exception {
-        Payment updatePayment = new Payment(Long.valueOf(1), null, null, "Hairbrush");
+        Payment updatePayment = new Payment(1, null, null, "Hairbrush");
         Optional<Payment> updatedPayment = Optional.of(new Payment(new BigDecimal(100), Currency.AUD, "Hairbrush"));
         Optional<Payment> payment = Optional.of(getDummyPayment());
-        when(mockPaymentDao.findById(Long.valueOf(1))).thenReturn(payment);
-        when(mockPaymentDao.save(updatePayment)).thenReturn(updatedPayment);
-        when(mockPaymentDao.findById(Long.valueOf(1))).thenReturn(updatedPayment);
-        Payment actualPayment = paymentService.updatePayment(Long.valueOf(1), updatePayment);
+        when(mockPaymentDao.findById(1)).thenReturn(payment);
+        when(mockPaymentDao.findById(1)).thenReturn(updatedPayment);
+        Payment actualPayment = paymentService.updatePayment(1, updatePayment);
         assertEquals(updatedPayment.get(), actualPayment);
         assertEquals(updatedPayment.get().getId(), actualPayment.getId());
         assertEquals(updatedPayment.get().getProductName(), actualPayment.getProductName());
@@ -139,13 +133,12 @@ class PaymentServiceTest {
 
     @Test
     void updatePaymentEverythingNullButAmount() throws Exception {
-        Payment updatePayment = new Payment(Long.valueOf(1), new BigDecimal(200), null, null);
+        Payment updatePayment = new Payment(1, new BigDecimal(200), null, null);
         Optional<Payment> updatedPayment = Optional.of(new Payment(new BigDecimal(200), Currency.AUD, "Hairbrush"));
         Optional<Payment> payment = Optional.of(getDummyPayment());
-        when(mockPaymentDao.findById(Long.valueOf(1))).thenReturn(payment);
-        when(mockPaymentDao.save(updatePayment)).thenReturn(updatedPayment);
-        when(mockPaymentDao.findById(Long.valueOf(1))).thenReturn(updatedPayment);
-        Payment actualPayment = paymentService.updatePayment(Long.valueOf(1), updatePayment);
+        when(mockPaymentDao.findById(1)).thenReturn(payment);
+        when(mockPaymentDao.findById(1)).thenReturn(updatedPayment);
+        Payment actualPayment = paymentService.updatePayment(1, updatePayment);
         assertEquals(updatedPayment.get(), actualPayment);
         assertEquals(updatedPayment.get().getId(), actualPayment.getId());
         assertEquals(updatedPayment.get().getAmount(), actualPayment.getAmount());
@@ -162,11 +155,11 @@ class PaymentServiceTest {
     @Test
     void getPaymentsById() throws Exception {
         Optional<Payment> expectedPayment = Optional.of(getDummyPayment());
-        when(mockPaymentDao.findById(Long.valueOf(1))).thenReturn(expectedPayment);
+        when(mockPaymentDao.findById(1)).thenReturn(expectedPayment);
 
-        Payment actualPayment = paymentService.getPaymentById(Long.valueOf(1));
+        Payment actualPayment = paymentService.getPaymentById(1);
         assertEquals(expectedPayment.get(), actualPayment);
-        verify(mockPaymentDao, times(1)).findById(Long.valueOf(1));
+        verify(mockPaymentDao, times(1)).findById(1);
         verifyNoMoreInteractions(mockPaymentDao);
 
     }
@@ -174,15 +167,15 @@ class PaymentServiceTest {
     @Test
     void deletePayment() throws Exception {
         Optional<Payment> payment = Optional.of(getDummyPayment());
-        when(mockPaymentDao.findById(Long.valueOf(1))).thenReturn(payment);
-        paymentService.deletePayment(Long.valueOf(1));
-        verify(mockPaymentDao, times(1)).deleteById(Long.valueOf(1));
+        when(mockPaymentDao.findById(1)).thenReturn(payment);
+        paymentService.deletePayment(1);
+        verify(mockPaymentDao, times(1)).deleteById(1);
     }
 
     @Test
     void deletePaymentException() {
-        when(mockPaymentDao.findById(Long.valueOf(1))).thenReturn(null);
-        assertThrows(DataMissingException.class, () -> paymentService.deletePayment(Long.valueOf(1)));
+        when(mockPaymentDao.findById(1)).thenReturn(null);
+        assertThrows(DataMissingException.class, () -> paymentService.deletePayment(1));
 
     }
 

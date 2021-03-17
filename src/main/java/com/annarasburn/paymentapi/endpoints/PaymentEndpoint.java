@@ -1,12 +1,11 @@
 package com.annarasburn.paymentapi.endpoints;
 
-
 import com.annarasburn.paymentapi.dto.Payment;
 import com.annarasburn.paymentapi.services.PaymentService;
 import com.sun.istack.NotNull;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class PaymentEndpoint {
         this.paymentService = paymentService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/payment")
     @ApiOperation(
             value = "Get Payments",
             response = Payment.class,
@@ -32,8 +31,8 @@ public class PaymentEndpoint {
             @ApiResponse(code = 200, message = "Successfully fetched payments"),
             @ApiResponse(code = 400, message = "Unable to handle request"),
             @ApiResponse(code = 500, message = "Server Error")})
-    public List<Payment> getAllPayments() {
-        return paymentService.getAllPayments();
+    public void getAllPayments() {
+        System.out.println("Hello World");
     }
 
     @GetMapping("/{id}")
@@ -46,7 +45,7 @@ public class PaymentEndpoint {
             @ApiResponse(code = 400, message = "Unable to handle request"),
             @ApiResponse(code = 500, message = "Server Error")})
     public Payment getPaymentById(
-            @ApiParam(value = "Payment Id", required = true) @PathVariable("id") final long id
+            @ApiParam(value = "Payment Id", required = true) @PathVariable("id") final int id
     ) throws Exception {
         return paymentService.getPaymentById(id);
     }
@@ -60,7 +59,7 @@ public class PaymentEndpoint {
             @ApiResponse(code = 400, message = "Unable to handle request"),
             @ApiResponse(code = 500, message = "Server Error")})
     public void deletePayment(
-            @ApiParam(value = "Payment Id", required = true) @PathVariable("id") final Long id
+            @ApiParam(value = "Payment Id", required = true) @PathVariable("id") final int id
     ) throws Exception {
         paymentService.deletePayment(id);
     }
@@ -91,7 +90,7 @@ public class PaymentEndpoint {
             @ApiResponse(code = 400, message = "Unable to handle request"),
             @ApiResponse(code = 500, message = "Server Error")})
     public Payment updatePayment(
-            @ApiParam(value = "Payment Id", required = true) @PathVariable("id") final Long id,
+            @ApiParam(value = "Payment Id", required = true) @PathVariable("id") final int id,
             @NotNull @RequestBody Payment payment
     ) throws Exception {
         return paymentService.updatePayment(id, payment);

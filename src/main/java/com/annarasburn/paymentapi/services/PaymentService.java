@@ -7,6 +7,7 @@ import com.sun.istack.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@Transactional(rollbackFor = Exception.class)
 public class PaymentService {
 
     private final PaymentDao paymentDao;
@@ -42,7 +44,7 @@ public class PaymentService {
         return paymentDao.findAll();
     }
 
-    public Payment getPaymentById(Long id) throws Exception {
+    public Payment getPaymentById(int id) throws Exception {
         Optional<Payment> payment = paymentDao.findById(id);
         if (payment.isEmpty()) {
             throw new Exception("Payment was not found");
@@ -50,7 +52,7 @@ public class PaymentService {
         return payment.get();
     }
 
-    public void deletePayment(Long id) throws Exception {
+    public void deletePayment(int id) throws Exception {
         Optional<Payment> payment = paymentDao.findById(id);
 
         if (null == payment || payment.isEmpty()) {
@@ -64,7 +66,7 @@ public class PaymentService {
         }
     }
 
-    public Payment updatePayment(Long id, Payment payment) throws Exception {
+    public Payment updatePayment(int id, Payment payment) throws Exception {
         Optional<Payment> originalPayment = paymentDao.findById(id);
 
         if (originalPayment == null || originalPayment.isEmpty()){
@@ -83,7 +85,7 @@ public class PaymentService {
     }
 
     @NotNull
-    private Payment getPayment(Long id, Payment payment) {
+    private Payment getPayment(int id, Payment payment) {
         Payment updatePayment = new Payment();
         updatePayment.setId(id);
         if (null != payment.getCurrency()) {

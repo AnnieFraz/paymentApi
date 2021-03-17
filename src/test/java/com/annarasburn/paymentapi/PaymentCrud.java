@@ -2,7 +2,7 @@ package com.annarasburn.paymentapi;
 
 import com.annarasburn.paymentapi.dto.Currency;
 import com.annarasburn.paymentapi.dto.Payment;
-import com.nimbusds.oauth2.sdk.util.CollectionUtils;
+import org.springframework.util.CollectionUtils;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
@@ -47,7 +47,7 @@ public class PaymentCrud {
         List<Payment> paymentList = new ArrayList<>();
         for (int i = 1; i < payments.size(); i++) {
                 Payment createdPayment = new Payment();
-                createdPayment.setId(Long.valueOf(payments.get(i).get(0)));
+                createdPayment.setId(Integer.valueOf(payments.get(i).get(0)));
                 createdPayment.setAmount(new BigDecimal(payments.get(i).get(1)));
                 createdPayment.setCurrency(Currency.valueOf(payments.get(i).get(2)));
                 createdPayment.setProductName(payments.get(i).get(3));
@@ -98,7 +98,7 @@ public class PaymentCrud {
         List<Payment> expectedPayments = new ArrayList<>();
         for (int i = 1; i < paymentList.size(); i++) {
             Payment createdPayment = new Payment();
-            createdPayment.setId(Long.valueOf(paymentList.get(i).get(0)));
+            createdPayment.setId(Integer.valueOf(paymentList.get(i).get(0)));
             createdPayment.setAmount(new BigDecimal(paymentList.get(i).get(1)));
             createdPayment.setCurrency(Currency.valueOf(paymentList.get(i).get(2)));
             createdPayment.setProductName(paymentList.get(i).get(3));
@@ -107,10 +107,10 @@ public class PaymentCrud {
 
         List<Payment> actualPayments = this.response.getBody();
 
-        if (CollectionUtils.isNotEmpty(expectedPayments)) {
+        if (!CollectionUtils.isEmpty(expectedPayments)) {
             assertEquals(expectedPayments.size(), actualPayments.size());
             for (Payment expected : expectedPayments) {
-                Payment actual = actualPayments.stream().filter(a -> expected.getId().equals(a.getId())).findFirst().orElse(null);
+                Payment actual = actualPayments.stream().filter(a -> expected.getId() == a.getId()).findFirst().orElse(null);
                 assertEquals(expected.getAmount(), actual.getAmount());
                 assertEquals(expected.getCurrency(), actual.getCurrency());
                 assertEquals(expected.getProductName(), actual.getProductName());
