@@ -42,33 +42,15 @@ public class PaymentCrud {
 
     @Given("^Payments to be saved has following details$")
     public void paymentsToBeSavedHasFollowingDetails(DataTable dt) {
-        List<List<String>> payments = dt.asLists(String.class);
 
-        List<Payment> paymentList = new ArrayList<>();
-        for (int i = 1; i < payments.size(); i++) {
-                Payment createdPayment = new Payment();
-                createdPayment.setId(Integer.valueOf(payments.get(i).get(0)));
-                createdPayment.setAmount(new BigDecimal(payments.get(i).get(1)));
-                createdPayment.setCurrency(Currency.valueOf(payments.get(i).get(2)));
-                createdPayment.setProductName(payments.get(i).get(3));
-                paymentList.add(createdPayment);
-        }
-        givenPayments = paymentList;
+        //TODO: Set up a ddl for the database here
+        givenPayments = getPayments(dt);
     }
 
     @When("the endpoint to create new payments is hit with the following payment")
     public void theEndpointToCreateNewPaymentsIsHitWithTheFollowingPayment(DataTable dt) throws URISyntaxException {
 
-        List<List<String>> paymentList = dt.asLists(String.class);
-
-        List<Payment> payments = new ArrayList<>();
-        for (int i = 1; i < paymentList.size(); i++) {
-            Payment createdPayment = new Payment();
-            createdPayment.setAmount(new BigDecimal(paymentList.get(i).get(0)));
-            createdPayment.setCurrency(Currency.valueOf(paymentList.get(i).get(1)));
-            createdPayment.setProductName(paymentList.get(i).get(2));
-            payments.add(createdPayment);
-        }
+        List<Payment> payments = getPayments(dt);
         String url = "http://localhost:8080/payment/create";
         RequestEntity<List<Payment>> request = RequestEntity
                 .put(new URI(url))
@@ -122,16 +104,7 @@ public class PaymentCrud {
     @When("the endpoint to update payment with id {string} is hit with the following payment")
     public void theEndpointToUpdatePaymentWithIdIsHitWithTheFollowingPayment(String paymentId, DataTable dt) throws URISyntaxException {
 
-        List<List<String>> paymentList = dt.asLists(String.class);
-
-        List<Payment> payments = new ArrayList<>();
-        for (int i = 1; i < paymentList.size(); i++) {
-            Payment createdPayment = new Payment();
-            createdPayment.setAmount(new BigDecimal(paymentList.get(i).get(0)));
-            createdPayment.setCurrency(Currency.valueOf(paymentList.get(i).get(1)));
-            createdPayment.setProductName(paymentList.get(i).get(2));
-            payments.add(createdPayment);
-        }
+        List<Payment> payments = getPayments(dt);
 
         String url = "http://localhost:8080/payment/update/" + paymentId;
 
@@ -200,5 +173,19 @@ public class PaymentCrud {
                 new ParameterizedTypeReference<List<Payment>>() {
                 }
         );
+    }
+
+    private List<Payment> getPayments(DataTable dt) {
+        List<List<String>> paymentList = dt.asLists(String.class);
+
+        List<Payment> payments = new ArrayList<>();
+        for (int i = 1; i < paymentList.size(); i++) {
+            Payment createdPayment = new Payment();
+            createdPayment.setAmount(new BigDecimal(paymentList.get(i).get(0)));
+            createdPayment.setCurrency(Currency.valueOf(paymentList.get(i).get(1)));
+            createdPayment.setProductName(paymentList.get(i).get(2));
+            payments.add(createdPayment);
+        }
+        return payments;
     }
 }
