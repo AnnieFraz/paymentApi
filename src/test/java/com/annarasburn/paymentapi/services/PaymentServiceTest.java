@@ -40,7 +40,15 @@ class PaymentServiceTest {
         when(mockPaymentDao.saveAll(anyList())).thenReturn(getListOfPayments());
         List<Payment> actualPayments = paymentService.addPayments(expectedPayments);
         assertEquals(expectedPayments.size(), actualPayments.size());
-        assertEquals(expectedPayments, actualPayments);
+        for (int i = 0; i < getListOfPayments().size(); i++) {
+            Payment actualPayment = actualPayments.get(i);
+            Payment expectedPayment = getListOfPayments().get(i);
+
+            assertEquals(expectedPayment.getAmount(),actualPayment.getAmount());
+            assertEquals(expectedPayment.getCurrency(),actualPayment.getCurrency());
+            assertEquals(expectedPayment.getProductName(),actualPayment.getProductName());
+
+        }
         verify(mockPaymentDao, times(1)).saveAll(anyList());
         verifyNoMoreInteractions(mockPaymentDao);
     }
@@ -149,7 +157,16 @@ class PaymentServiceTest {
         when(mockPaymentDao.findAll()).thenReturn(getListOfPayments());
         List<Payment> actualPayments = paymentService.getAllPayments();
         assertEquals(getListOfPayments().size(), actualPayments.size());
-        assertEquals(getListOfPayments(), actualPayments);
+
+        for (int i = 0; i < getListOfPayments().size(); i++) {
+            Payment actualPayment = actualPayments.get(i);
+            Payment expectedPayment = getListOfPayments().get(i);
+
+            assertEquals(expectedPayment.getAmount(),actualPayment.getAmount());
+            assertEquals(expectedPayment.getCurrency(),actualPayment.getCurrency());
+            assertEquals(expectedPayment.getProductName(),actualPayment.getProductName());
+
+        }
     }
 
     @Test

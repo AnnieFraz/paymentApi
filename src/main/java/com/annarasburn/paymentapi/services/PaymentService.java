@@ -4,7 +4,8 @@ import com.annarasburn.paymentapi.dao.PaymentDao;
 import com.annarasburn.paymentapi.dto.Payment;
 import com.annarasburn.paymentapi.dto.exception.DataMissingException;
 import com.sun.istack.NotNull;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,11 +15,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Slf4j
 @Transactional(rollbackFor = Exception.class)
 public class PaymentService {
 
     private final PaymentDao paymentDao;
+
+    private static Logger log = LoggerFactory.getLogger(PaymentService.class);
 
     @Autowired
     public PaymentService(
@@ -31,9 +33,10 @@ public class PaymentService {
         if (!CollectionUtils.isEmpty(paymentList)) {
             validatePaymentList(paymentList);
             try {
+                log.info("Payments Created");
                 return paymentDao.saveAll(paymentList);
             } catch (Exception e) {
-               // log.error("Exception while saving payments", e);
+                log.error("Exception while saving payments", e);
                 throw new Exception("Exception while saving payments");
             }
         }
@@ -60,8 +63,9 @@ public class PaymentService {
         }
         try {
             paymentDao.deleteById(id);
+            log.info("Payment Deleted");
         } catch (Exception e) {
-            // log.error("Exception while deleting payments", e);
+            log.error("Exception while deleting payments", e);
             throw new Exception("Exception while deleting payments");
         }
     }
@@ -75,6 +79,7 @@ public class PaymentService {
 
         Payment updatePayment = getPayment(id, payment);
         paymentDao.save(updatePayment);
+        log.info("Payment Updated");
 
         Optional<Payment> updatedPayment = paymentDao.findById(id);
 

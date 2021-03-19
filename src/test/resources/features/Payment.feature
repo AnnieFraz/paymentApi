@@ -7,8 +7,8 @@ Feature: Payment CRUD operations
       | 1  | 2000   | GBP      | Mobile      |
       | 2  | 3000   | USD      | TV          |
     When the endpoint to create new payments is hit with the following payment
-      | amount | currency | productName |
-      | 1000   | EUR      | Laptop      |
+      | id | amount | currency | productName |
+      | 0  | 1000   | EUR      | Laptop      |
     Then the response code should be 200
     And the response should contain the following list of payments
       | id | amount | currency | productName |
@@ -22,8 +22,8 @@ Feature: Payment CRUD operations
       | 1  | 2000   | GBP      | Mobile      |
       | 2  | 3000   | USD      | TV          |
     When the endpoint to update payment with id "1" is hit with the following payment
-      | amount | currency | productName |
-      | 1000   | EUR      | Laptop      |
+      | id | amount | currency | productName |
+      | 0  | 1000   | EUR      | Laptop      |
     Then the response code should be 200
     And the response should contain the following list of payments
       | id | amount | currency | productName |
@@ -35,12 +35,14 @@ Feature: Payment CRUD operations
       | id | amount | currency | productName |
       | 1  | 2000   | GBP      | Mobile      |
       | 2  | 3000   | USD      | TV          |
-    When the endpoint to delete payment with id "1" is hit
+      | 3  | 1000   | EUR      | Laptop      |
+    When the endpoint to delete payment with id "3" is hit
     Then the response code should be 200
     When the endpoint to get all payments is hit
     Then the response code should be 200
     And the response should contain the following list of payments
       | id | amount | currency | productName |
+      | 1  | 2000   | GBP      | Mobile      |
       | 2  | 3000   | USD      | TV          |
 
   Scenario: Get All Payments

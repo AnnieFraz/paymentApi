@@ -21,21 +21,17 @@ repositories {
 }
 
 dependencies {
+
+	implementation 'org.projectlombok:lombok:1.18.16'
+	compile("org.springframework.boot:spring-boot-starter-web")
+	testCompile('org.springframework.boot:spring-boot-starter-test')
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'postgresql:postgresql:9.1-901.jdbc4'
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.7.0'
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.1'
-	implementation group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	annotationProcessor 'org.projectlombok:lombok'
-	implementation group: 'io.cucumber', name: 'cucumber-java', version: '6.10.1'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
+	testImplementation group: 'io.cucumber', name: 'cucumber-java', version: '6.8.0'
+	testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '6.8.0'
+	testCompile "com.github.tomakehurst:wiremock-jre8:2.27.2"
 }
 
 test {
